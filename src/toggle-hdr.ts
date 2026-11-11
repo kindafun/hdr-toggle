@@ -1,4 +1,4 @@
-import { showHUD } from "@raycast/api";
+import { LaunchType, environment, showHUD, updateCommandMetadata } from "@raycast/api";
 import { showFailureToast } from "@raycast/utils";
 import {
   HdrctlError,
@@ -12,6 +12,12 @@ import {
 export default async function toggleHdr(): Promise<void> {
   const selector = targetSelector();
 
+  // A scheduled run must never flip the display. It only refreshes the label.
+  if (environment.launchType === LaunchType.Background) {
+    await refreshSubtitle();
+    return;
+  }
+
   try {
     const display = await resolveTarget();
 
@@ -21,9 +27,29 @@ export default async function toggleHdr(): Promise<void> {
     }
 
     const state = await setState(selector, "toggle");
+    await updateCommandMetadata({ subtitle: subtitleFor(display.name, state) });
     await showHUD(`HDR ${state === "on" ? "On" : "Off"} — ${display.name}`);
   } catch (error) {
     await showToggleFailure(error, selector);
+  }
+}
+
+function subtitleFor(displayName: string, state: "on" | "off"): string {
+  return `${state === "on" ? "Disable" : "Enable"} HDR — ${displayName}`;
+}
+
+/** Reads the current state and rewrites the subtitle shown under the command title. */
+async function refreshSubtitle(): Promise<void> {
+  try {
+    const display = await resolveTarget();
+    await updateCommandMetadata({ subtitle: subtitleFor(display.name, display.hdr ? "on" : "off") });
+  } catch (error) {
+    const subtitle =
+      error instanceof HdrctlError && error.code === 2
+        ? "No HDR display connected"
+        : "HDR state unavailable";
+
+    await updateCommandMetadata({ subtitle }).catch(() => undefined);
   }
 }
 

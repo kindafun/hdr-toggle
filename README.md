@@ -46,6 +46,10 @@ Assign a hotkey to **Toggle HDR** in Raycast → Settings → Extensions → HDR
 
 Toggles the target display and shows `HDR On — LG HDR 4K` or a failure toast.
 
+The command title is fixed by the manifest, but the subtitle tracks reality: `Disable HDR — LG HDR 4K` when HDR is on, `Enable HDR — …` when it is off, `No HDR display connected` when there is nothing to act on. It refreshes after every toggle and once a minute in the background.
+
+The manifest sets `"interval": "1m"`, so Raycast also launches this command in the background. That run is guarded by `environment.launchType` and **only** rewrites the subtitle — it can never toggle your display. Do not remove that check.
+
 Target selection: the **Target Display** preference if set, otherwise the first external HDR-capable display. Leave the preference empty and replugging can't break targeting. Set it to a display name if you have two HDR displays.
 
 The command waits ~1 s for the panel to finish its mode change before reporting, so the HUD reflects reality. The screen goes black for that second — that's the display switching modes, not a bug.

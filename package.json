@@ -13,7 +13,8 @@
       "name": "toggle-hdr",
       "title": "Toggle HDR",
       "description": "Flip high dynamic range for your external display",
-      "mode": "no-view"
+      "mode": "no-view",
+      "interval": "1m"
     },
     {
       "name": "menu-bar",
