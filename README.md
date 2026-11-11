@@ -1,0 +1,108 @@
+# HDR Toggle
+
+A Raycast extension that turns **HDR on or off** for an external display on macOS, plus an optional watcher that applies your preferred HDR state when the display connects.
+
+Built for an LG HDR 4K on an M1 MacBook Pro running macOS 26.6.1, but nothing is hardcoded to that display.
+
+```
+Toggle HDR      assign a hotkey in Raycast    flip HDR, get a HUD
+HDR Displays                                  menu-bar icon with live state and per-display toggles
+HDR on Connect                                opt-in rules for when a display is plugged in
+```
+
+## How it works
+
+macOS has no public API for HDR. This uses the private `MonitorPanel` framework:
+
+```objc
+[display setPreferHDRModes:YES];   // MPDisplay
+```
+
+That is the same call BetterDisplay and the open-source DisplaySync use. It needs no SIP changes, no entitlements, no Accessibility permission, and no Automation permission. The extension shells out to a small Objective-C binary (`hdrctl`) that makes the call; the binary is bundled in `assets/` and copied to Raycast's support directory on first use.
+
+## Requirements
+
+- macOS on Apple Silicon or Intel
+- Raycast 2.x
+- Xcode Command Line Tools (`xcode-select --install`) to compile `hdrctl`
+- An HDR-capable external display
+
+## Build and run
+
+```sh
+cd ~/"Dev Projects/hdr-toggle"
+make                 # builds tools/hdrctl, copies to assets/, ad-hoc signs both
+npm install
+npm run dev          # registers the extension with Raycast and hot-reloads
+```
+
+`npm run dev` must stay running while you change code. Ctrl-C stops the dev server; the extension stays installed in Raycast.
+
+Assign a hotkey to **Toggle HDR** in Raycast → Settings → Extensions → HDR Toggle.
+
+## Commands
+
+### Toggle HDR
+
+Toggles the target display and shows `HDR On — LG HDR 4K` or a failure toast.
+
+Target selection: the **Target Display** preference if set, otherwise the first external HDR-capable display. Leave the preference empty and replugging can't break targeting. Set it to a display name if you have two HDR displays.
+
+The command waits ~1 s for the panel to finish its mode change before reporting, so the HUD reflects reality. The screen goes black for that second — that's the display switching modes, not a bug.
+
+### HDR Displays
+
+A menu-bar icon: filled when the target display is in HDR, hollow when not, exclamation when no HDR display is connected. Click for per-display state, a toggle per display, watcher status, and a link to **HDR on Connect**.
+
+The icon refreshes every 30 seconds and immediately after any toggle it performs. Raycast keeps it alive while Raycast runs.
+
+### HDR on Connect
+
+Per-display rules: **Apply HDR On When Connected**, **Apply HDR Off When Connected**, **Remove Rule**, and **Remove Watcher Agent**. Rules are opt-in; nothing runs in the background until you set one.
+
+When at least one rule exists, the extension installs a launchd agent:
+
+```
+~/Library/LaunchAgents/com.hdrtoggle.watch.plist
+```
+
+It runs `<Raycast support>/hdrctl watch --rules <Raycast support>/rules.json`, applies rules once at startup (2 s delay) and on display add/enable events (1.2 s debounce). It no-ops when the display is already in the desired state, which also prevents a feedback loop with its own mode change. Logs go to `<support>/watcher.log`.
+
+Removing every rule, or choosing **Remove Watcher Agent**, unloads the agent and deletes the plist. The watcher idles at 0% CPU between events.
+
+## Menu bar icon: showing and hiding it
+
+Raycast's manifest is static — an extension cannot add or remove its own commands at runtime. To hide the menu bar icon, disable the command in Raycast:
+
+**Raycast → Settings → Extensions → HDR Toggle → HDR Displays**
+
+That toggle is Raycast's, not the extension's. There is no preference that can do it.
+
+## Permissions
+
+None. The first run may show a Raycast prompt about the extension running a command from outside the app if you launch it from a `raycast://` deeplink; choose **Always Run Command** once per command.
+
+## Troubleshooting
+
+| Symptom | Fix |
+|---|---|
+| "The hdrctl binary is missing" | Run `make` in the extension folder. |
+| "Display Not Found" | The configured **Target Display** name isn't connected. Connect it, or clear the preference to fall back to the first external HDR display. |
+| "HDR Not Supported" | The display reports no HDR modes. Check the cable/port; HDR needs DisplayPort 1.4 or HDMI 2.0 bandwidth. |
+| "HDR Did Not Switch" | The panel didn't reach the requested state within 2.5 s. Retry; some docks/switches swallow the mode change. |
+| Watcher doesn't react after replug | `launchctl print gui/$(id -u)/com.hdrtoggle.watch` and check `<support>/watcher.log`. Remove and re-add the rule to reinstall. |
+| A macOS update removes `MonitorPanel` | The binary fails to link or the class disappears. Fallback: drive System Settings via AppleScript (slower, needs Accessibility) or use BetterDisplay Pro's `hdr` CLI parameter. |
+
+## Uninstall
+
+1. Open **HDR on Connect** and choose **Remove Watcher Agent**.
+2. Remove the extension in Raycast.
+3. Optional: `rm -rf ~/Library/Application\ Support/com.raycast.macos/extensions/hdr-toggle`.
+
+## Publishing to the Raycast Store
+
+Possible, with caveats. The Store allows bundled binaries when their source is available and the build is traceable — this repo ships `tools/hdrctl.m` and the Makefile. Reviewers may still object to a prebuilt blob, and a store build would need the binary regenerated in CI rather than committed. For personal use, none of that matters.
+
+## License
+
+MIT. The `MonitorPanel` interface is private and undocumented; use at your own risk.
