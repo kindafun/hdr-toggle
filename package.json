@@ -36,7 +36,7 @@
       "required": false,
       "title": "Target Display",
       "description": "Name of the display Toggle HDR should act on. Leave empty to use the first external HDR-capable display.",
-      "placeholder": "LG HDR 4K"
+      "placeholder": "e.g. LG HDR 4K"
     }
   ],
   "scripts": {

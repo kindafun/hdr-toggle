@@ -52,6 +52,8 @@ The manifest sets `"interval": "1m"`, so Raycast also launches this command in t
 
 Target selection: the **Target Display** preference if set, otherwise the first external HDR-capable display. Leave the preference empty and replugging can't break targeting. Set it to a display name if you have two HDR displays.
 
+Display names come from macOS, which reads them from the display's EDID — the same string System Settings shows. Nothing is hardcoded: swap the LG for a Dell and the subtitle, HUD and menu bar all say the Dell's name. The LG in this README is only an example.
+
 The command waits ~1 s for the panel to finish its mode change before reporting, so the HUD reflects reality. The screen goes black for that second — that's the display switching modes, not a bug.
 
 ### HDR Displays
