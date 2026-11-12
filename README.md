@@ -114,3 +114,15 @@ Possible, with caveats. The Store allows bundled binaries when their source is a
 ## License
 
 MIT. The `MonitorPanel` interface is private and undocumented; use at your own risk.
+
+## Icon
+
+The icon is generated, not drawn by hand:
+
+```sh
+swift design/icon.swift assets/icon.png word      # current: HDR wordmark
+swift design/icon.swift assets/icon.png monitor   # display split 42/58
+swift design/icon.swift assets/icon.png sun       # half-disc on a horizon
+```
+
+It renders at 1024 and aspect-fits type to the tile; downscale to 512 with `sips -z 512 512`.
