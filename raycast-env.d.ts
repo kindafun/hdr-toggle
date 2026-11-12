@@ -22,6 +22,8 @@ declare namespace Preferences {
   export type MenuBar = ExtensionPreferences & {}
   /** Preferences accessible in the `hdr-on-connect` command */
   export type HdrOnConnect = ExtensionPreferences & {}
+  /** Preferences accessible in the `watch-displays` command */
+  export type WatchDisplays = ExtensionPreferences & {}
 }
 
 declare namespace Arguments {
@@ -31,5 +33,16 @@ declare namespace Arguments {
   export type MenuBar = {}
   /** Arguments passed to the `hdr-on-connect` command */
   export type HdrOnConnect = {}
+  /** Arguments passed to the `watch-displays` command */
+  export type WatchDisplays = {}
 }
 
+declare module "swift:*/swift" {
+  export function listDisplays(): Promise<any[]>;
+  export function setHdr(displayID: number, value: string): Promise<boolean>;
+
+  export class SwiftError extends Error {
+    stderr: string;
+    stdout: string;
+  }
+}

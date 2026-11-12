@@ -29,13 +29,14 @@ char *hdr_list_json(void) {
   NSMutableArray *result = [NSMutableArray array];
 
   for (MPDisplay *display in [MPDisplayMgr new].displays) {
+    BOOL hdr = display.hasHDRModes ? display.preferHDRModes : NO;
     [result addObject:@{
       @"id" : @(display.displayID),
       @"name" : display.displayName ?: @"Unknown",
       @"uuid" : display.uuid.UUIDString ?: @"",
-      @"builtin" : @(display.isBuiltIn),
-      @"hdrCapable" : @(display.hasHDRModes),
-      @"hdr" : @(display.hasHDRModes ? display.preferHDRModes : NO),
+      @"builtin" : display.isBuiltIn ? @YES : @NO,
+      @"hdrCapable" : display.hasHDRModes ? @YES : @NO,
+      @"hdr" : hdr ? @YES : @NO,
     }];
   }
 
