@@ -29,7 +29,6 @@ That is the same call BetterDisplay and the open-source DisplaySync use. It need
 Users install nothing. This section is only for working on the code.
 
 ```sh
-cd ~/"Dev Projects/hdr-toggle"
 make                 # builds tools/hdrctl, copies to assets/, ad-hoc signs both
 npm install
 npm run dev          # registers the extension with Raycast and hot-reloads
