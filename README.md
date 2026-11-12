@@ -2,7 +2,6 @@
 
 A Raycast extension that turns **HDR on or off** for an external display on macOS, plus an optional watcher that applies your preferred HDR state when the display connects.
 
-Built for an LG HDR 4K on an M1 MacBook Pro running macOS 26.6.1, but nothing is hardcoded to that display.
 
 ```
 Toggle HDR      assign a hotkey in Raycast    flip HDR, get a HUD
