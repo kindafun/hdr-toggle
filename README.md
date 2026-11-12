@@ -1,4 +1,4 @@
-# HDR Toggle
+# External HDR
 
 A Raycast extension that turns **HDR on or off** for an external display on macOS, plus an optional watcher that applies your preferred HDR state when the display connects.
 
@@ -38,7 +38,7 @@ npm run dev          # registers the extension with Raycast and hot-reloads
 
 `npm run dev` must stay running while you change code. Ctrl-C stops the dev server; the extension stays installed in Raycast.
 
-Assign a hotkey to **Toggle HDR** in Raycast → Settings → Extensions → HDR Toggle.
+Assign a hotkey to **Toggle HDR** in Raycast → Settings → Extensions → External HDR.
 
 ## Commands
 
@@ -82,7 +82,7 @@ Removing every rule, or choosing **Remove Watcher Agent**, unloads the agent and
 
 Raycast's manifest is static — an extension cannot add or remove its own commands at runtime. To hide the menu bar icon, disable the command in Raycast:
 
-**Raycast → Settings → Extensions → HDR Toggle → HDR Displays**
+**Raycast → Settings → Extensions → External HDR → HDR Displays**
 
 That toggle is Raycast's, not the extension's. There is no preference that can do it.
 
@@ -105,7 +105,7 @@ None. The first run may show a Raycast prompt about the extension running a comm
 
 1. Open **HDR on Connect** and choose **Remove Watcher Agent**.
 2. Remove the extension in Raycast.
-3. Optional: `rm -rf ~/Library/Application\ Support/com.raycast.macos/extensions/hdr-toggle`.
+3. Optional: `rm -rf ~/Library/Application\ Support/com.raycast.macos/extensions/external-hdr`.
 
 ## Publishing to the Raycast Store
 

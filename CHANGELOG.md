@@ -1,4 +1,4 @@
-# HDR Toggle Changelog
+# External HDR Changelog
 
 ## [Store readiness] - 2026-11-11
 

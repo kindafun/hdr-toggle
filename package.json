@@ -1,7 +1,7 @@
 {
   "$schema": "https://www.raycast.com/schemas/extension.json",
-  "name": "hdr-toggle",
-  "title": "HDR Toggle",
+  "name": "external-hdr",
+  "title": "External HDR",
   "description": "Turn high dynamic range on or off for external displays",
   "icon": "icon.png",
   "author": "jjuan",

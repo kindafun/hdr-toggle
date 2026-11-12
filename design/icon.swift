@@ -1,4 +1,4 @@
-// Renders the HDR Toggle app icon.
+// Renders the External HDR app icon.
 // Usage: swift design/icon.swift <output.png> [monitor|sun|word]
 //
 // monitor: a display split at 42%, slate for SDR, white for HDR.

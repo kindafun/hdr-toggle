@@ -4,7 +4,7 @@ import { useEffect, useRef } from "react";
 import { isAgentInstalled } from "./lib/agent";
 import { type Display, type Selector, listDisplays, setState, targetSelector } from "./lib/hdrctl";
 
-const OPEN_ON_CONNECT_DEEPLINK = `raycast://extensions/${environment.ownerOrAuthorName}/hdr-toggle/hdr-on-connect`;
+const OPEN_ON_CONNECT_DEEPLINK = `raycast://extensions/${environment.ownerOrAuthorName}/external-hdr/hdr-on-connect`;
 const REFRESH_INTERVAL_MS = 30_000;
 
 function errorMessage(error: unknown): string {
