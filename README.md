@@ -22,12 +22,13 @@ That is the same call BetterDisplay and the open-source DisplaySync use. It need
 
 ## Requirements
 
-- macOS on Apple Silicon or Intel
-- Raycast 2.x
-- Xcode Command Line Tools (`xcode-select --install`) to compile `hdrctl`
-- An HDR-capable external display
+**Using it:** macOS on Apple Silicon or Intel, Raycast 2.x, and an HDR-capable external display. Nothing else. The extension ships a prebuilt universal `hdrctl`, copies it into Raycast's support directory on first run, and asks for no permissions.
 
-## Build and run
+**Building it:** Xcode Command Line Tools (`xcode-select --install`).
+
+## Development
+
+Users install nothing. This section is only for working on the code.
 
 ```sh
 cd ~/"Dev Projects/hdr-toggle"
@@ -35,6 +36,8 @@ make                 # builds tools/hdrctl, copies to assets/, ad-hoc signs both
 npm install
 npm run dev          # registers the extension with Raycast and hot-reloads
 ```
+
+`assets/hdrctl` is committed on purpose: Raycast's Store build copies it straight into the bundle and never runs `make`. Rebuild and commit it whenever `tools/hdrctl.m` changes.
 
 `npm run dev` must stay running while you change code. Ctrl-C stops the dev server; the extension stays installed in Raycast.
 
@@ -109,7 +112,9 @@ None. The first run may show a Raycast prompt about the extension running a comm
 
 ## Publishing to the Raycast Store
 
-Possible, with caveats. The Store allows bundled binaries when their source is available and the build is traceable — this repo ships `tools/hdrctl.m` and the Makefile. Reviewers may still object to a prebuilt blob, and a store build would need the binary regenerated in CI rather than committed. For personal use, none of that matters.
+Ready apart from screenshots. The Store allows bundled binaries when their source is available and the build is traceable: `tools/hdrctl.m`, `tools/Makefile`, and the committed `assets/hdrctl` all live in the repo, and CI rebuilds the binary from source on every push to prove it still compiles. `SECURITY.md` documents exactly what the binary does and does not touch.
+
+The remaining judgment call is `MonitorPanel` itself — a private framework. No public API exists for HDR, so there is no compliant alternative; reviewers may still decline. `SECURITY.md` is written for that conversation.
 
 ## License
 

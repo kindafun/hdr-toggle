@@ -1,10 +1,10 @@
-import { Icon, MenuBarExtra, Toast, open, showToast, updateCommandMetadata } from "@raycast/api";
+import { Icon, MenuBarExtra, Toast, environment, open, showToast, updateCommandMetadata, Keyboard } from "@raycast/api";
 import { useCachedPromise } from "@raycast/utils";
 import { useEffect, useRef } from "react";
 import { isAgentInstalled } from "./lib/agent";
 import { type Display, type Selector, listDisplays, setState, targetSelector } from "./lib/hdrctl";
 
-const OPEN_ON_CONNECT_DEEPLINK = "raycast://extensions/juanguzu/hdr-toggle/hdr-on-connect";
+const OPEN_ON_CONNECT_DEEPLINK = `raycast://extensions/${environment.ownerOrAuthorName}/hdr-toggle/hdr-on-connect`;
 const REFRESH_INTERVAL_MS = 30_000;
 
 function errorMessage(error: unknown): string {
@@ -23,12 +23,7 @@ function findTarget(displays: Display[], selector: Selector | undefined): Displa
 }
 
 export default function MenuBarCommand() {
-  const {
-    data: displays,
-    isLoading,
-    error,
-    revalidate: revalidateDisplays,
-  } = useCachedPromise(listDisplays);
+  const { data: displays, isLoading, error, revalidate: revalidateDisplays } = useCachedPromise(listDisplays);
   const { data: agentInstalled, revalidate: revalidateAgent } = useCachedPromise(isAgentInstalled);
 
   // Keep the 30 s poll stable even if the hooks hand back new callbacks between renders.
@@ -99,9 +94,7 @@ export default function MenuBarCommand() {
                 title={display.hdr ? "HDR is on" : "HDR is off"}
                 subtitle={display.builtin ? "Built-in" : display.hdrCapable ? "HDR capable" : "No HDR support"}
                 icon={display.hdr ? Icon.Checkmark : Icon.Circle}
-                tooltip={
-                  canToggle ? `Click to turn HDR ${display.hdr ? "off" : "on"}` : "HDR can't be changed here"
-                }
+                tooltip={canToggle ? `Click to turn HDR ${display.hdr ? "off" : "on"}` : "HDR can't be changed here"}
                 onAction={canToggle ? () => void toggleHdr(display) : undefined}
               />
             </MenuBarExtra.Section>
@@ -126,7 +119,7 @@ export default function MenuBarCommand() {
         <MenuBarExtra.Item
           title="Refresh"
           icon={Icon.ArrowClockwise}
-          shortcut={{ modifiers: ["cmd"], key: "r" }}
+          shortcut={Keyboard.Shortcut.Common.Refresh}
           onAction={refreshAll}
         />
         <MenuBarExtra.Item

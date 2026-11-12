@@ -1,13 +1,6 @@
 import { LaunchType, environment, showHUD, updateCommandMetadata } from "@raycast/api";
 import { showFailureToast } from "@raycast/utils";
-import {
-  HdrctlError,
-  type Display,
-  type Selector,
-  resolveTarget,
-  setState,
-  targetSelector,
-} from "./lib/hdrctl";
+import { HdrctlError, type Display, type Selector, resolveTarget, setState, targetSelector } from "./lib/hdrctl";
 
 export default async function toggleHdr(): Promise<void> {
   const selector = targetSelector();
@@ -45,9 +38,7 @@ async function refreshSubtitle(): Promise<void> {
     await updateCommandMetadata({ subtitle: subtitleFor(display.name, display.hdr ? "on" : "off") });
   } catch (error) {
     const subtitle =
-      error instanceof HdrctlError && error.code === 2
-        ? "No HDR display connected"
-        : "HDR state unavailable";
+      error instanceof HdrctlError && error.code === 2 ? "No HDR display connected" : "HDR state unavailable";
 
     await updateCommandMetadata({ subtitle }).catch(() => undefined);
   }
@@ -76,10 +67,7 @@ async function showToggleFailure(error: unknown, selector: Selector | undefined)
       case 3:
         await showFailureToast(error, {
           title: "HDR Not Supported",
-          message:
-            configuredName !== undefined
-              ? `"${configuredName}" does not support HDR.`
-              : error.message,
+          message: configuredName !== undefined ? `"${configuredName}" does not support HDR.` : error.message,
         });
         return;
 

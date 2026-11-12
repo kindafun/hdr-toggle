@@ -35,9 +35,7 @@ export async function ensureBinary(): Promise<string> {
   try {
     await fs.access(source);
   } catch {
-    throw new Error(
-      `The hdrctl binary is missing at ${source}. Run \`make\` in the extension folder to build it.`,
-    );
+    throw new Error(`The hdrctl binary is missing at ${source}. Run \`make\` in the extension folder to build it.`);
   }
 
   const sourceHash = await sha256(source);
@@ -71,18 +69,8 @@ export async function getState(selector?: Selector): Promise<"on" | "off"> {
   return parseState(stdout);
 }
 
-export async function setState(
-  selector: Selector | undefined,
-  value: "on" | "off" | "toggle",
-): Promise<"on" | "off"> {
-  const stdout = await runHdrctl([
-    "set",
-    ...selectorArgs(selector),
-    "--value",
-    value,
-    "--wait",
-    "2500",
-  ]);
+export async function setState(selector: Selector | undefined, value: "on" | "off" | "toggle"): Promise<"on" | "off"> {
+  const stdout = await runHdrctl(["set", ...selectorArgs(selector), "--value", value, "--wait", "2500"]);
   return parseState(stdout);
 }
 
@@ -262,11 +250,7 @@ async function sha256OrNull(file: string): Promise<string | null> {
 }
 
 function isMissingFile(error: unknown): boolean {
-  return (
-    typeof error === "object" &&
-    error !== null &&
-    (error as Record<string, unknown>).code === "ENOENT"
-  );
+  return typeof error === "object" && error !== null && (error as Record<string, unknown>).code === "ENOENT";
 }
 
 function outputToText(output: unknown): string | undefined {

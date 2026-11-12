@@ -4,10 +4,14 @@
   "title": "HDR Toggle",
   "description": "Turn high dynamic range on or off for external displays",
   "icon": "icon.png",
-  "author": "juanguzu",
+  "author": "jjuan",
   "license": "MIT",
-  "platforms": ["macOS"],
-  "categories": ["System"],
+  "platforms": [
+    "macOS"
+  ],
+  "categories": [
+    "System"
+  ],
   "commands": [
     {
       "name": "toggle-hdr",
@@ -51,8 +55,11 @@
     "@raycast/utils": "^2.3.3"
   },
   "devDependencies": {
+    "@raycast/eslint-config": "^2.2.0",
     "@types/node": "^22.10.0",
     "@types/react": "^19.3.0",
+    "eslint": "^10.14.0",
+    "prettier": "^3.10.0",
     "typescript": "^5.7.0"
   }
 }

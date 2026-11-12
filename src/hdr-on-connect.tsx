@@ -1,4 +1,15 @@
-import { Action, ActionPanel, Color, Icon, List, Toast, showHUD, showToast, updateCommandMetadata } from "@raycast/api";
+import {
+  Action,
+  ActionPanel,
+  Color,
+  Icon,
+  List,
+  Toast,
+  showHUD,
+  showToast,
+  updateCommandMetadata,
+  Keyboard,
+} from "@raycast/api";
 import { useCachedPromise } from "@raycast/utils";
 import { useEffect } from "react";
 import { isAgentInstalled, readRules, syncAgent, uninstallAgent, writeRules, type Rule } from "./lib/agent";
@@ -173,12 +184,12 @@ export default function HdrOnConnectCommand() {
                     {canRule ? (
                       <>
                         <Action
-                          title="Apply HDR On When Connected"
+                          title="Apply HDR on When Connected"
                           icon={Icon.Checkmark}
                           onAction={() => void setRule(display, true)}
                         />
                         <Action
-                          title="Apply HDR Off When Connected"
+                          title="Apply HDR off When Connected"
                           icon={Icon.Circle}
                           onAction={() => void setRule(display, false)}
                         />
@@ -203,7 +214,7 @@ export default function HdrOnConnectCommand() {
                     <Action
                       title="Refresh"
                       icon={Icon.ArrowClockwise}
-                      shortcut={{ modifiers: ["cmd"], key: "r" }}
+                      shortcut={Keyboard.Shortcut.Common.Refresh}
                       onAction={refreshAll}
                     />
                   </ActionPanel>
