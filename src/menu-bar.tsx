@@ -1,4 +1,4 @@
-import { Icon, MenuBarExtra, Toast, open, showToast } from "@raycast/api";
+import { Icon, MenuBarExtra, Toast, open, showToast, updateCommandMetadata } from "@raycast/api";
 import { useCachedPromise } from "@raycast/utils";
 import { useEffect, useRef } from "react";
 import { isAgentInstalled } from "./lib/agent";
@@ -64,6 +64,20 @@ export default function MenuBarCommand() {
   }
 
   const target = displays ? findTarget(displays, targetSelector()) : undefined;
+  const subtitle = error
+    ? "HDR state unavailable"
+    : displays === undefined
+      ? undefined
+      : target
+        ? `HDR ${target.hdr ? "on" : "off"} — ${target.name}`
+        : "No HDR display connected";
+
+  // Keep the root-search label in sync; the menu-bar command is already running.
+  useEffect(() => {
+    if (subtitle === undefined) return;
+    void updateCommandMetadata({ subtitle }).catch(() => undefined);
+  }, [subtitle]);
+
   const statusIcon =
     error || (displays && !target) ? Icon.ExclamationMark : target?.hdr ? Icon.CircleFilled : Icon.Circle;
   const tooltip = error

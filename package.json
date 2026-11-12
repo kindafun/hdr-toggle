@@ -25,6 +25,7 @@
     {
       "name": "hdr-on-connect",
       "title": "HDR on Connect",
+      "subtitle": "Auto-apply rules",
       "description": "Choose which displays get HDR applied automatically when connected",
       "mode": "view"
     }

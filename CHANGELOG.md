@@ -4,6 +4,8 @@
 
 - Toggle HDR now shows the next action and current state in its subtitle
   (`Disable HDR — LG HDR 4K`), refreshed after each toggle and every minute
+- HDR Displays shows the live target state in its subtitle
+  (`HDR on — LG HDR 4K`); HDR on Connect reports whether auto-apply is armed
 - Background-refresh runs are guarded so they only update the label, never the display
 
 ## [Initial Version] - 2026-11-11

@@ -1,5 +1,6 @@
-import { Action, ActionPanel, Color, Icon, List, Toast, showHUD, showToast } from "@raycast/api";
+import { Action, ActionPanel, Color, Icon, List, Toast, showHUD, showToast, updateCommandMetadata } from "@raycast/api";
 import { useCachedPromise } from "@raycast/utils";
+import { useEffect } from "react";
 import { isAgentInstalled, readRules, syncAgent, uninstallAgent, writeRules, type Rule } from "./lib/agent";
 import { type Display, listDisplays } from "./lib/hdrctl";
 
@@ -15,6 +16,18 @@ function ruleFor(rules: Rule[], displayName: string): Rule | undefined {
   return rules.find((rule) => sameDisplay(rule.display, displayName));
 }
 
+function autoApplySubtitle(rules: Rule[], agentInstalled: boolean | undefined): string {
+  if (rules.length === 0) return "Auto-apply: off";
+  if (agentInstalled === false) return "Auto-apply: watcher not running";
+
+  if (rules.length === 1) {
+    const rule = rules[0];
+    return `Auto-apply: HDR ${rule.hdr ? "on" : "off"} — ${rule.display}`;
+  }
+
+  return `Auto-apply: ${rules.length} displays`;
+}
+
 export default function HdrOnConnectCommand() {
   const {
     data: displays,
@@ -26,6 +39,13 @@ export default function HdrOnConnectCommand() {
   const { data: agentInstalled, revalidate: revalidateAgent } = useCachedPromise(isAgentInstalled);
 
   const rules = rulesFile?.rules ?? [];
+  const subtitle = rulesFile === undefined ? undefined : autoApplySubtitle(rules, agentInstalled);
+
+  // Root-search label: says whether auto-apply is armed, without opening the view.
+  useEffect(() => {
+    if (subtitle === undefined) return;
+    void updateCommandMetadata({ subtitle }).catch(() => undefined);
+  }, [subtitle]);
 
   function refreshAll(): void {
     revalidateDisplays();

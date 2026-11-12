@@ -60,11 +60,13 @@ The command waits ~1 s for the panel to finish its mode change before reporting,
 
 A menu-bar icon: filled when the target display is in HDR, hollow when not, exclamation when no HDR display is connected. Click for per-display state, a toggle per display, watcher status, and a link to **HDR on Connect**.
 
-The icon refreshes every 30 seconds and immediately after any toggle it performs. Raycast keeps it alive while Raycast runs.
+The icon refreshes every 30 seconds and immediately after any toggle it performs. Raycast keeps it alive while Raycast runs. Because it is always running, it also keeps the root-search subtitle current: `HDR on — LG HDR 4K`, `No HDR display connected`, or `HDR state unavailable`. If you disable this command in Raycast settings, that label stops updating.
 
 ### HDR on Connect
 
 Per-display rules: **Apply HDR On When Connected**, **Apply HDR Off When Connected**, **Remove Rule**, and **Remove Watcher Agent**. Rules are opt-in; nothing runs in the background until you set one.
+
+Its root-search subtitle says whether auto-apply is armed: `Auto-apply: off`, `Auto-apply: HDR on — LG HDR 4K`, or `Auto-apply: watcher not running`. This view is the only place rules change, so that label can't drift.
 
 When at least one rule exists, the extension installs a launchd agent:
 
