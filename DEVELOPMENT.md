@@ -63,3 +63,7 @@ swift design/store-shot.swift raw.png metadata/external-hdr-1.png
 
 The source capture must be 1500×950 (a 2× window capture) to land on Raycast's
 2000×1250 canvas without scaling.
+
+## Store screenshot validator
+
+`metadata-images` rejects two screenshots whose **backgrounds differ** (edge difference must stay under 12), so capture every shot the same way: Raycast's **Capture Window** with **Save to Metadata**, on the same wallpaper. On a 1x display it writes 1000×625; upscale to 2000×1250 with `sips -z 1250 2000`. It also checks ~12% padding on each side.
